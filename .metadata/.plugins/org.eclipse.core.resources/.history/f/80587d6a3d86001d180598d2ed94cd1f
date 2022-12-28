@@ -1,0 +1,6 @@
+function confirmacao(idPaciente){
+	let retorno = confirm("Tem certeza que deseja excluir este agendamento permanentemente?")
+	if(retorno == true){
+		alert(idPaciente)
+	}
+}

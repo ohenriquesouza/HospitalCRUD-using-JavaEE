@@ -1,0 +1,17 @@
+function validar(){
+	alert('teste')
+	let nome = formConsulta.nome.value
+	let carteira = formConsulta.carteira.value
+	
+	if(nome == ""){
+		alert('Preencha o campo "Nome"')
+		formConsulta.nome.focus()
+		return false
+	}else if(carteira == ""){
+		alert('Preencha o campo "Número da Carteira"')
+		formConsulta.carteira.focus()
+		return false
+	}else{
+		document.forms["formConsulta"].submit()
+	}
+}

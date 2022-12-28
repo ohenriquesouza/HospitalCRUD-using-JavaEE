@@ -1,0 +1,62 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<%@ page import = "java.util.Date"%>
+<!DOCTYPE html>
+<html lang = "pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cadastro</title>
+        <style>
+            body{
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: large;
+            }
+            .box{
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 15px;
+                border-radius: 10px;
+            }
+            fieldset{
+                border-radius: 10px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="box">
+            <form action="">
+                <fieldset>
+                    <legend><b>Cadastre-se com seus dados</b></legend><br/>
+                    <div class="input_box">
+                        <label for="nome">Nome Completo</label>
+                        <input type="text" name="nome" id="nome" class="input_name" required></input>
+                    </div>
+                    <br>
+                    <div class="input_box">
+                        <label for="NmPlano">Número do Plano</label>
+                        <input type="number" name="NmPlano" id="NmPlano" class="input_nmPlano" required></input>
+                    </div>
+                    <br>
+	                <div class="input_box">
+                        <label for="NmPlano">Número do Plano</label>
+                        <input type="number" name="NmPlano" id="NmPlano" class="input_nmPlano" required></input>
+                    </div>
+                    <br>
+                    <div class="input_box">
+                        <label for="idEspec">Especialidade</label>
+                        <input type="number" name="idEspec" id="idEspec" class="input_idEspec" required></input>
+                    </div>
+                    <br>
+                    <center>
+                        <input type="submit"></input>
+                    </center>
+                </fieldset>
+            </form>
+        </div>
+    </body>
+</html>

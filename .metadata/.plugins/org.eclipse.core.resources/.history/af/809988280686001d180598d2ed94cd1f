@@ -1,0 +1,15 @@
+function validar(){
+	//alert('teste')
+	let nome = formConsulta.nome.value
+	let carteira = formConsulta.nmCarteira.value
+	
+	if(nome == ""){
+		alert('Preencha o campo "Nome"')
+		formConsulta.nome.focus()
+		return false
+	}else if(fone == ""){
+		alert('Preencha o campo "Nome"')
+		formConsulta.nome.focus()
+		return false
+	}
+}

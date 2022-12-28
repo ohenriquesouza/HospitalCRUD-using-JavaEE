@@ -1,0 +1,5 @@
+function validar(){
+	//alert('teste')
+	let nome = formConsulta.nome.value
+	let nmCarteira = formConsulta.nmCarteira.value
+}

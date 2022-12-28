@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="icon" href="imgs/saudeicon.png">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: medium;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+    <body>
+    	<img src="imgs/saudeicon.png">
+      	<h1>BEM-VINDO, REALIZE SEU CADASTRO</h1>
+      	<center><a href="cadastro.html"><button>ACESSAR</button></a></center>    
+    </body>
+</html>

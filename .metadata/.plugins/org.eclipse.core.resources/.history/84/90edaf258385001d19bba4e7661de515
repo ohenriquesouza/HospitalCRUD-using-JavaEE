@@ -1,0 +1,7 @@
+package model;
+
+public class JavaBeans {
+	private int idespecs;
+	private String nome_espec;
+	private String profissional;
+}

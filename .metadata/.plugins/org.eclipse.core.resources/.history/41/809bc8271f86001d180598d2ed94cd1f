@@ -1,0 +1,35 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<%@ page import="model.JavaBeans" %>
+<%@ page import="java.util.ArrayList" %>
+<%
+	ArrayList<JavaBeans> consultas = (ArrayList<JavaBeans>) request.getAttribute("consultasAgendadas");
+%>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<title>Cadastro de pacientes</title>
+<link rel="icon" href="imgs/usericon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<h1>CONSULTAS AGENDADAS</h1>
+	<center><a class="botao1" href="novaConsulta.html">Novo agendamento</a></center>
+	<table>
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Nome</th>
+				<th>Número da carteira</th>
+				<th>Plano de saúde</th>
+				<th>Especialidade</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+		
+	
+	
+	</table>
+</body>
+</html>

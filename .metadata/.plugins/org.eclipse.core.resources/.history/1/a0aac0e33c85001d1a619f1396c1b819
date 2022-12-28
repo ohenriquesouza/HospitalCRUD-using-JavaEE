@@ -1,0 +1,13 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<!DOCTYPE html>
+<html lang = "pt-br">
+<head>
+<meta charset="utf-8">
+<title>JSP test</title>
+</head>
+<body>
+	<h1>Teste JSP</h1>
+
+</body>
+</html>

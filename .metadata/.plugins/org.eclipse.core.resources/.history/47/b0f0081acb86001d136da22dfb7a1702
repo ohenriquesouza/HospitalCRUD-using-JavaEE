@@ -1,0 +1,159 @@
+package controller;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import model.DAO;
+import model.JavaBeans;
+
+@WebServlet(urlPatterns = { "/Controller", "/main", "/insert", "/select", "/edit", "/delete", "/relatorio", "/search" })
+@SuppressWarnings("unused")
+public class Controller extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	DAO dao = new DAO();
+	JavaBeans consulta = new JavaBeans();
+
+	public Controller() {
+		super();
+
+	}
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String action = request.getServletPath();
+		System.out.println(action);
+		if (action.equals("/main")) {
+			consultas(request, response);
+		} else if (action.equals("/insert")) {
+			novoAgendamento(request, response);
+		} else if (action.equals("/select")) {
+			listarConsultas(request, response);
+		} else if (action.equals("/edit")) {
+			editarConsulta(request, response);
+		} else if (action.equals("/delete")) {
+			removeConsulta(request, response);
+		} else if (action.equals("/relatorio")) {
+			gerarpdf(request, response);
+		} else {
+			response.sendRedirect("index.html");
+		}
+	}
+
+	protected void consultas(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		ArrayList<JavaBeans> consultas = dao.visualizarConsultas();
+		request.setAttribute("consultasAgendadas", consultas);
+		RequestDispatcher rd = request.getRequestDispatcher("cadastro.jsp");
+		rd.forward(request, response);
+	}
+
+	protected void novoAgendamento(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		// System.out.println(request.getParameter("nome"));
+		// System.out.println(request.getParameter("NmCarteira"));
+		// System.out.println(request.getParameter("plan"));
+		// System.out.println(request.getParameter("especs"));
+
+		consulta.setnomePaciente(request.getParameter("nome"));
+		consulta.setnmCarteira(request.getParameter("NmCarteira"));
+		consulta.setPlanSaude(request.getParameter("plan"));
+		consulta.setespeci(request.getParameter("especs"));
+
+		dao.agendarConsulta(consulta);
+		response.sendRedirect("main");
+	}
+
+	protected void listarConsultas(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String idPacienteAux = request.getParameter("idPaciente");
+		consulta.setidPaciente(idPacienteAux);
+		dao.selecionaConsulta(consulta);
+		request.setAttribute("idPaciente", consulta.getidPaciente());
+		request.setAttribute("nome", consulta.getnomePaciente());
+		request.setAttribute("NmCarteira", consulta.getnmCarteira());
+		request.setAttribute("plan", consulta.getPlanSaude());
+		request.setAttribute("espcs", consulta.getespeci());
+		RequestDispatcher rd = request.getRequestDispatcher("edit.jsp");
+		rd.forward(request, response);
+	}
+
+	protected void editarConsulta(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// System.out.println(request.getParameter("iduser"));
+		// System.out.println(request.getParameter("nome"));
+		// System.out.println(request.getParameter("NmCarteira"));
+		// System.out.println(request.getParameter("plan"));
+		// System.out.println(request.getParameter("especs"));
+
+		consulta.setidPaciente(request.getParameter("iduser"));
+		consulta.setnomePaciente(request.getParameter("nome"));
+		consulta.setnmCarteira(request.getParameter("NmCarteira"));
+		consulta.setPlanSaude(request.getParameter("plan"));
+		consulta.setespeci(request.getParameter("especs"));
+		dao.alteraConsulta(consulta);
+		response.sendRedirect("main");
+	}
+
+	protected void removeConsulta(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String idRemover = request.getParameter("idPaciente");
+		consulta.setidPaciente(idRemover);
+		dao.removeConsulta(consulta);
+		response.sendRedirect("main");
+	}
+
+	protected void gerarpdf(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		Document doc = new Document();
+		int cont = 0;
+		try {
+			response.setContentType("apllication/pdf");
+			response.addHeader("Content-Disposition", "inline; filename=" + "Consultas.pdf");
+			PdfWriter.getInstance(doc, response.getOutputStream());
+			doc.open();
+			doc.add(new Paragraph("Consultas agendadas:"));
+			doc.add(new Paragraph(" "));
+			PdfPTable table = new PdfPTable(4);
+			PdfPCell col1 = new PdfPCell(new Paragraph("Nome"));
+			PdfPCell col2 = new PdfPCell(new Paragraph("Nº da carteira"));
+			PdfPCell col3 = new PdfPCell(new Paragraph("Plano de Saúde"));
+			PdfPCell col4 = new PdfPCell(new Paragraph("Especialidade"));
+			table.addCell(col1);
+			table.addCell(col2);
+			table.addCell(col3);
+			table.addCell(col4);
+			ArrayList<JavaBeans> consultas = dao.visualizarConsultas();
+			for (int i = 0; i < consultas.size(); i++) {
+				table.addCell(consultas.get(i).getnomePaciente());
+				table.addCell(consultas.get(i).getnmCarteira());
+				table.addCell(consultas.get(i).getPlanSaude());
+				table.addCell(consultas.get(i).getespeci());
+				cont++;
+			}
+			doc.add(table);
+			doc.add(new Paragraph("No total, foram agendadas " + cont + " consultas."));
+			doc.close();
+		} catch (Exception e) {
+			System.out.println(e);
+			doc.close();
+		}
+	}
+}

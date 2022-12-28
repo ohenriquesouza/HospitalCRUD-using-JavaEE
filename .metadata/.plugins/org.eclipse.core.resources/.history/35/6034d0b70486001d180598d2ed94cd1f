@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang = "pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Nova Consulta</title>
+        <link rel="stylesheet" href="style.css">
+        <style>
+            fieldset{
+                border-radius: 10px;
+                border: 1px solid #66bbff;
+            }
+            .input_name{
+            	width: 320px;
+            	padding: 5px;
+            	margin-bottom: 8px;
+            	border: 1px solid #66bbff;
+            	border-radius: 7px;
+            }
+            .input_nmCarteira{
+            	width: 320px;
+            	padding: 5px;
+            	margin-bottom: 8px;
+            	border: 1px solid #66bbff;
+            	border-radius: 7px;
+            }
+             .input_plano{
+            	padding: 5px;
+            	margin-bottom: 8px;
+            	border: 1px solid #66bbff;
+            	border-radius: 7px;
+            }
+             .input_espec{
+            	padding: 5px;
+            	margin-bottom: 8px;
+            	border: 1px solid #66bbff;
+            	border-radius: 7px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="box">
+        	<h1>INFORME SEUS DADOS</h1>
+            <form action="">
+                <fieldset>
+                    <div class="input_box">
+                        <label for="nome">Nome Completo:</label>
+                        <input type="text" name="nome" id="nome" class="input_name" required></input>
+                    </div>
+                    <br>
+	                <div class="input_box">
+                        <label for="NmCarteira">Número da carteira:</label>
+                        <input type="number" name="NmCarteira" id="NmCarteira" class="input_nmCarteira" required></input>
+                    </div>
+                    <br>
+                     <div class="input_box">
+                        <label for="">Selecione o plano de saúde:</label>
+						<select name="plan" id="plan" form="" class="input_plano">
+						  <option value="ortopedia">Unimed</option>
+						  <option value="pediatria">Amil</option>
+						  <option value="clinica">GNDI</option>
+						</select>
+                    </div>
+                    <br>
+                    <div class="input_box">
+                        <label for="">Especialidade desejada:</label>
+						<select name="especs" id="especs" form="" class="input_espec">
+						  <option value="ortopedia">Ortopedia</option>
+						  <option value="pediatria">Pediatria</option>
+						  <option value="clinica">Clínica geral</option>
+						</select>
+                    </div>
+                    <br>
+                    <input class="botao1" type="submit"></input>
+                </fieldset>
+            </form>
+        </div>
+    </body>
+</html>

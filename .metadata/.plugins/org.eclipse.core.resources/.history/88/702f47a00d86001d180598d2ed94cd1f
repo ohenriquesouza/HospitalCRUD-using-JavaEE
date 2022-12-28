@@ -1,0 +1,37 @@
+package model;
+
+public class JavaBeans {
+	private int idespecs;
+	private String nome_espec;
+	private String profissional;
+	
+	public JavaBeans() {
+		super();
+	}
+	
+	public JavaBeans(int idespecs, String nome_espec, String profissional) {
+		super();
+		this.idespecs = idespecs;
+		this.nome_espec = nome_espec;
+		this.profissional = profissional;
+	}
+
+	public int getIdespecs() {
+		return idespecs;
+	}
+	public void setIdespecs(int idespecs) {
+		this.idespecs = idespecs;
+	}
+	public String getNome_espec() {
+		return nome_espec;
+	}
+	public void setNome_espec(String nome_espec) {
+		this.nome_espec = nome_espec;
+	}
+	public String getProfissional() {
+		return profissional;
+	}
+	public void setProfissional(String profissional) {
+		this.profissional = profissional;
+	}
+}

@@ -1,0 +1,53 @@
+package model;
+
+public class JavaBeans {
+	private int idPaciente;
+	private String nomePaciente;
+	private String nmCarteira;
+	private int PlanSaude;
+	private int especi;
+	
+	public JavaBeans() {
+		super();
+	}
+	
+	public JavaBeans(int idPaciente, String nomePaciente, String nmCarteira, int PlanSaude, int especi) {
+		super();
+		this.idPaciente = idPaciente;
+		this.nomePaciente = nomePaciente;
+		this.nmCarteira = nmCarteira;
+		this.PlanSaude = PlanSaude;
+		this.especi = especi;
+	}
+
+	public int getidPaciente() {
+		return idPaciente;
+	}
+	public void setidPaciente(int idPaciente) {
+		this.idPaciente = idPaciente;
+	}
+	public String getnomePaciente() {
+		return nomePaciente;
+	}
+	public void setnomePaciente(String nomePaciente) {
+		this.nomePaciente = nomePaciente;
+	}
+	public String getnmCarteira() {
+		return nmCarteira;
+	}
+	public void setnmCarteira(String nmCarteira) {
+		this.nmCarteira = nmCarteira;
+	}
+	public int getPlanSaude() {
+		return PlanSaude;
+	}
+	public void setPlanSaude(int PlanSaude) {
+		this.PlanSaude = PlanSaude;
+	}
+	public int getespeci() {
+		return especi;
+	}
+	public void setespeci(int especi) {
+		this.especi = especi;
+	}
+}

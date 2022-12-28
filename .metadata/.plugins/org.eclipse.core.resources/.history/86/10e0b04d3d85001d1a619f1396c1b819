@@ -1,0 +1,17 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<%@page import = "ava.util.date"%>
+<!DOCTYPE html>
+<html lang = "pt-br">
+<head>
+<meta charset="utf-8">
+<title>JSP test</title>
+</head>
+<body>
+	<h1>Teste JSP</h1>
+	<%out.println("Professor Henrique Souza");%>
+	<%--Uso do elemento expressão--%>
+	<p>DATA: <%=new Date()%></p>
+
+</body>
+</html>

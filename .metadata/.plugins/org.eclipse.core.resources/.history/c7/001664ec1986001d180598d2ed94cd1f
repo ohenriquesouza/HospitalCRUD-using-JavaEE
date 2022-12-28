@@ -1,0 +1,61 @@
+package controller;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import model.DAO;
+import model.JavaBeans;
+
+@WebServlet(urlPatterns = { "/Controller", "/main", "/insert" })
+@SuppressWarnings("unused")
+public class Controller extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	DAO dao = new DAO();
+	JavaBeans consulta = new JavaBeans();
+
+	public Controller() {
+		super();
+
+	}
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String action = request.getServletPath();
+		System.out.println(action);
+		if (action.equals("/main")) {
+			consultas(request, response);
+		}else if(action.equals("/insert")) {
+			novoAgendamento(request, response);
+		}else {
+			response.sendRedirect("index.html");
+		}
+	}
+
+	protected void consultas(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		response.sendRedirect("cadastro.jsp");
+
+	}
+	
+	protected void novoAgendamento(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		//System.out.println(request.getParameter("nome"));
+		//System.out.println(request.getParameter("NmCarteira"));
+		//System.out.println(request.getParameter("plan"));
+		//System.out.println(request.getParameter("especs"));
+		
+		consulta.setnomePaciente(request.getParameter("nome"));
+		consulta.setnmCarteira(request.getParameter("NmCarteira"));
+		consulta.setPlanSaude(request.getParameter("plan"));
+		consulta.setespeci(request.getParameter("especs"));
+		
+		dao.agendarConsulta(consulta);
+		response.sendRedirect("main");
+	}
+}

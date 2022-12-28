@@ -1,0 +1,48 @@
+package model;
+
+public class JavaBeans {
+	private int idPaciente;
+	private String nomePaciente;
+	private int nmCarteira;
+	private String PlanSaude;
+	private String especi;
+	private int idespecs;
+	private String nome_espec;
+	private String profissional;
+	
+	public JavaBeans() {
+		super();
+	}
+	
+	public JavaBeans(int idPaciente, String nomePaciente, int nmCarteira, String profissional) {
+		super();
+		this.idPaciente = idPaciente;
+		this.nome_espec = nome_espec;
+		this.profissional = profissional;
+	}
+
+	public int getidPaciente() {
+		return idPaciente;
+	}
+	public void setidPaciente(int idPaciente) {
+		this.idPaciente = idPaciente;
+	}
+	public String getnomePaciente() {
+		return nomePaciente;
+	}
+	public void setnomePaciente(String nomePaciente) {
+		this.nomePaciente = nomePaciente;
+	}
+	public int getnmCarteira() {
+		return nmCarteira;
+	}
+	public void setidPaciente(int idPaciente) {
+		this.idPaciente = idPaciente;
+	}
+	public String getProfissional() {
+		return profissional;
+	}
+	public void setProfissional(String profissional) {
+		this.profissional = profissional;
+	}
+}
