@@ -1,0 +1,95 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<%@ page import="model.JavaBeans" %>
+<%@ page import="model.Espec" %>
+<%@ page import="java.util.ArrayList" %>
+<%
+	ArrayList<JavaBeans> consultas = (ArrayList<JavaBeans>) request.getAttribute("consultasAgendadas");
+	ArrayList<Espec> especialidades = (ArrayList<Espec>) request.getAttribute("especsCadastradas");
+%>
+<!DOCTYPE html>
+<html lang = "pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Nova Consulta</title>
+        <link rel="stylesheet" href="style.css">
+        <style>
+            fieldset{
+                border-radius: 10px;
+                border: 1px solid #66bbff;
+            }
+            .input_name{
+            	width: 320px;
+            	padding: 5px;
+            	margin-bottom: 8px;
+            	border: 1px solid #66bbff;
+            	border-radius: 7px;
+            }
+            .input_nmCarteira{
+            	width: 320px;
+            	padding: 5px;
+            	margin-bottom: 8px;
+            	border: 1px solid #66bbff;
+            	border-radius: 7px;
+            }
+             .input_plano{
+            	padding: 5px;
+            	margin-bottom: 8px;
+            	border: 1px solid #66bbff;
+            	border-radius: 7px;
+            }
+             .input_espec{
+            	padding: 5px;
+            	margin-bottom: 8px;
+            	border: 1px solid #66bbff;
+            	border-radius: 7px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="box">
+        	<h1>INFORME SEUS DADOS</h1>
+            <form name="formConsulta" action="insert">
+                <fieldset>
+                    <div class="input_box">
+                        <label for="nome">Nome Completo:</label>
+                        <input type="text" name="nome" id="nome" class="input_name"></input>
+                    </div>
+                    <br>
+	                <div class="input_box">
+                        <label for="NmCarteira">Número da carteira:</label>
+                        <input type="number" name="NmCarteira" id="NmCarteira" class="input_nmCarteira"></input>
+                    </div>
+                    <br>
+                     <div class="input_box">
+                        <label for="">Selecione o plano de saúde:</label>
+						<select name="plan" id="plan" class="input_plano">
+						  <option value="01">Unimed</option>
+						  <option value="02">Amil</option>
+						  <option value="03">GNDI</option>
+						</select>
+                    </div>
+                    <br>
+                    <div class="input_box">
+                        <label for="">Especialidade desejada:</label>
+                        <%for(int i = 0; i< especialidades.size(); i++){ %>
+                        <%for(int j = i; j<especialidades.size(); j++) %>
+						<select name="especs" id="especs" class="input_espec">
+						  <option value="03"><%=especialidades.get(i).getnome_espec(), i++%></option>
+						  <option value="02"><%=especialidades.get(i).getnome_espec(), i++%></option>
+						  <option value="01"><%=especialidades.get(i).getnome_espec(), i++%></option>
+						</select>
+						<%} %>
+						<%} %>
+                    </div>
+                    <br>
+                    <center><input class="botao1" type="submit" onclick="validar(event)"></input></center>
+                </fieldset>
+            </form>
+        </div>
+        <script src="scripts/validacao.js"></script>
+    </body>
+</html>

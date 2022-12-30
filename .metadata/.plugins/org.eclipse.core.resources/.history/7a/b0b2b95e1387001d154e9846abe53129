@@ -1,0 +1,215 @@
+package model;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+public class DAO {
+	private String driver = "com.mysql.cj.jdbc.Driver";
+	private String url = "jdbc:mysql://127.0.0.1:3306/bdhospital?useTimezone=true&serverTimezone=UTC";
+	private String user = "root";
+	private String password = "Artur18maio998256455!";
+	
+	private Connection conectar() {
+		Connection con = null;
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, user, password);
+			return con;
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	public void agendarConsulta(JavaBeans consulta) {
+		System.out.println(consulta.getnomePaciente());
+		System.out.println(consulta.getnmCarteira());
+		System.out.println(consulta.getPlanSaude());
+		System.out.println(consulta.getespeci());
+		String add = "insert into usuario(nome_paciente, nm_carteira, idplan, idespecs) values(?, ?, ?, ?)";
+		try {
+			Connection con = conectar();
+			PreparedStatement pst = con.prepareStatement(add);//<--- JDBC PREPAREDSTATMENT
+			pst.setString(1, consulta.getnomePaciente());
+			pst.setString(2, consulta.getnmCarteira());
+			pst.setString(3, consulta.getPlanSaude());
+			pst.setString(4, consulta.getespeci());
+			//pst.executeUpdate();
+			pst.execute();
+			con.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	public ArrayList<JavaBeans> visualizarConsultas(){
+		ArrayList<JavaBeans> consultasA = new ArrayList<>();
+		String visualizar = "select u.idpaciente, u.nome_paciente, u.nm_carteira, p.nome_plan, e.nome_espec from usuario u inner join especialidades e on u.idespecs = e.idespecs inner join plano_saude p on u.idplan = p.idplan";
+		try {
+			Connection con = conectar();
+			PreparedStatement pst = con.prepareStatement(visualizar);
+			ResultSet rs = pst.executeQuery();//<--- JDBC RESULTSET
+			while(rs.next()) {
+				String idPaciente = rs.getString(1);
+				String nomePaciente = rs.getString(2);
+				String nmCarteira = rs.getString(3);
+				String PlanSaude = rs.getString(4);
+				String especi = rs.getString(5);
+				consultasA.add(new JavaBeans(idPaciente, nomePaciente, nmCarteira, PlanSaude, especi));
+			}
+			con.close();
+			return consultasA;
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	
+	public ArrayList<Espec> especsCadastradas(){
+		ArrayList<Espec> especsC = new ArrayList<>();
+		String visualizar = "select * from especialidades";
+		try {
+			Connection con = conectar();
+			PreparedStatement pst = con.prepareStatement(visualizar);
+			ResultSet rs = pst.executeQuery();//<--- JDBC RESULTSET
+			while(rs.next()) {
+				String idespecs = rs.getString(1);
+				String nome_espec = rs.getString(2);
+				especsC.add(new Espec(idespecs, nome_espec));
+			}
+			con.close();
+			return especsC;
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	
+	public ArrayList<Plano> planosCadastradas(){
+		ArrayList<Plano> planosC = new ArrayList<>();
+		String visualizar = "select * from plano_saude";
+		try {
+			Connection con = conectar();
+			PreparedStatement pst = con.prepareStatement(visualizar);
+			ResultSet rs = pst.executeQuery();//<--- JDBC RESULTSET
+			while(rs.next()) {
+				String idespecs = rs.getString(1);
+				String nome_espec = rs.getString(2);
+				planosC.add(new Plano(idplan, nome_plan));
+			}
+			con.close();
+			return planosC;
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	
+	public void selecionaConsulta(JavaBeans consulta) {
+		String selecionar = "select * from usuario where idpaciente = ?";
+		try {
+			Connection con = conectar();
+			PreparedStatement pst = con.prepareStatement(selecionar);
+			pst.setString(1, consulta.getidPaciente());
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				consulta.setidPaciente(rs.getString(1));
+				consulta.setnomePaciente(rs.getString(2));
+				consulta.setnmCarteira(rs.getString(3));
+				consulta.setPlanSaude(rs.getString(4));
+				consulta.setespeci(rs.getString(5));
+			}
+			con.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	
+	public void alteraConsulta(JavaBeans consulta) {
+		//System.out.println("Entrou no alteraConsulta");
+		String create = "update usuario set nome_paciente=?, nm_carteira=?,idplan=?,idespecs=? where idpaciente =?";
+		try {
+			Connection con = conectar();
+			PreparedStatement pst = con.prepareStatement(create);
+			pst.setString(1, consulta.getnomePaciente());
+			pst.setString(2, consulta.getnmCarteira());
+			pst.setString(3, consulta.getPlanSaude());
+			pst.setString(4, consulta.getespeci());
+			pst.setString(5, consulta.getidPaciente());
+			pst.executeUpdate();
+			con.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	
+	public void removeConsulta(JavaBeans consulta) {
+		String remove = "delete from usuario where idpaciente=?";
+		try {
+			Connection con = conectar();
+			PreparedStatement pst = con.prepareStatement(remove);
+			pst.setString(1, consulta.getidPaciente());
+			pst.executeUpdate();
+			con.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	
+	public void pesquisaConsulta(JavaBeans consulta) {
+		//System.out.println("Entrou no pesquisaConsulta");
+		String search = "select u.idpaciente, u.nome_paciente,"
+				+ " u.nm_carteira, p.nome_plan, e.nome_espec from usuario u inner join especialidades e on"
+				+ " u.idespecs = e.idespecs inner join plano_saude p on u.idplan = p.idplan where nome_paciente=? "
+				+ "and nm_carteira=?";
+		try {
+			Connection con = conectar();
+			PreparedStatement pst = con.prepareStatement(search);
+			pst.setString(1, consulta.getnomePaciente());
+			pst.setString(2, consulta.getnmCarteira());
+			pst.executeQuery();
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				consulta.setidPaciente(rs.getString(1));
+				consulta.setnomePaciente(rs.getString(2));
+				consulta.setnmCarteira(rs.getString(3));
+				consulta.setPlanSaude(rs.getString(4));
+				consulta.setespeci(rs.getString(5));
+			}
+			con.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+
+	public ArrayList<JavaBeans> retornarRegistrosNmCarteira(JavaBeans consulta) {
+		System.out.println("ENTROU NO DAO.JAVA");
+		ArrayList<JavaBeans> registrosCarteira = new ArrayList<>();
+		String selecionar = "select * from usuario where nm_carteira = ?";
+		try {
+			Connection con = conectar();
+			PreparedStatement pst = con.prepareStatement(selecionar);
+			pst.setString(1, consulta.getnmCarteira());
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				consulta.setidPaciente(rs.getString(1));
+				consulta.setnomePaciente(rs.getString(2));
+				consulta.setnmCarteira(rs.getString(3));
+				consulta.setPlanSaude(rs.getString(4));
+				consulta.setespeci(rs.getString(5));
+				String idPaciente= consulta.getidPaciente();
+				String nomePaciente= consulta.getnomePaciente();
+				String nmCarteira= consulta.getnmCarteira();
+				String PlanSaude= consulta.getPlanSaude();
+				String especi= consulta.getespeci();
+				registrosCarteira.add(new JavaBeans(idPaciente, nomePaciente, nmCarteira, PlanSaude, especi));
+			}
+			con.close();
+			return registrosCarteira;
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+}

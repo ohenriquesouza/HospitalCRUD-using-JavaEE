@@ -1,0 +1,107 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
+<%@ page import="model.Espec" %>
+<%@ page import="model.Plano" %>
+<%@ page import="java.util.ArrayList" %>
+<%
+	ArrayList<Espec> especialidades = (ArrayList<Espec>) request.getAttribute("especsCadastradas");
+	ArrayList<Plano> planos = (ArrayList<Plano>) request.getAttribute("planosCadastradas");
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Editar dados consulta</title>
+<link rel="stylesheet" href="style.css">
+<style>
+fieldset {
+	border-radius: 10px;
+	border: 1px solid #66bbff;
+}
+
+.input_name {
+	width: 320px;
+	padding: 5px;
+	margin-bottom: 8px;
+	border: 1px solid #66bbff;
+	border-radius: 7px;
+}
+
+.input_nmCarteira {
+	width: 320px;
+	padding: 5px;
+	margin-bottom: 8px;
+	border: 1px solid #66bbff;
+	border-radius: 7px;
+}
+
+.input_plano {
+	padding: 5px;
+	margin-bottom: 8px;
+	border: 1px solid #66bbff;
+	border-radius: 7px;
+}
+
+.input_espec {
+	padding: 5px;
+	margin-bottom: 8px;
+	border: 1px solid #66bbff;
+	border-radius: 7px;
+}
+.input_id {
+	padding: 5px;
+	margin-bottom: 8px;
+	border: 1px solid #66bbff;
+	border-radius: 7px;
+}
+</style>
+</head>
+<body>
+	<div class="box">
+		<h1>EDITAR DADOS</h1>
+		<form name="formConsulta" action="edit">
+			<fieldset>
+			<p>Sr. <%out.print(request.getAttribute("nome")); %>, aqui estão seus dados cadastrados.<br>⚠️ O ID do usuário não pode ser alterado.</p>
+				<div class="input_box">
+					<label for="nome">ID</label> <input type="text"
+						value="<%out.print(request.getAttribute("idPaciente")); %>" name="iduser" id="iduser" class="input_id" readonly></input>
+				</div>
+				<br>
+				<div class="input_box">
+					<label for="nome">Nome Completo:</label> <input type="text"
+						 value="<%out.print(request.getAttribute("nome")); %>" name="nome" id="nome" class="input_name"></input>
+				</div>
+				<br>
+				<div class="input_box">
+					<label for="NmCarteira">Número da carteira:</label> <input
+						type="number" value="<%out.print(request.getAttribute("NmCarteira")); %>" name="NmCarteira" id="NmCarteira"
+						class="input_nmCarteira"></input>
+				</div>
+				<br>
+				<div class="input_box">
+					 <label for="">Selecione o plano de saúde: <%out.print(request.getAttribute("plan")); %></label>
+						<select name="plan" id="plan" class="input_plano">
+						<%for(int i = 0; i< planos.size(); i++){ %>
+						  <option value="<%=planos.get(i).getidplan()%>"><%=planos.get(i).getnome_plan()%></option>
+						  <%} %>
+						</select>
+				</div>
+				<br>
+				< <div class="input_box">
+                        <label for="">Especialidade desejada:</label>
+						<select name="especs" id="especs" class="input_espec">
+						 <%for(int i = 0; i< especialidades.size(); i++){ %>
+						  <option value="<%=especialidades.get(i).getidespecs()%>"><%=especialidades.get(i).getnome_espec()%></option>
+						<%} %>
+						</select>
+                    </div>
+				<br>
+				<center>
+					<input class="botao1" type="submit" onclick="validar(event)"></input>
+				</center>
+			</fieldset>
+		</form>
+	</div>
+	<script src="scripts/validacao.js"></script>
+</body>
+</html>

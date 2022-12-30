@@ -54,7 +54,7 @@ fieldset {
 		<h1>VISUALIZAR DADOS</h1>
 		<form name="formConsulta" action="edit">
 			<fieldset>
-			<p>Sr. <%out.print(request.getAttribute("nome")); %>, aqui estão seus dados cadastrados.<br>⚠️ Os dados do usuário não podem ser alterados nesta página.</p>
+			<p>Sr(a). <%out.print(request.getAttribute("nome")); %>, aqui estão seus dados cadastrados.<br>⚠️ Os dados do usuário não podem ser alterados nesta página.</p>
 				<div class="input_box">
 					<label for="nome">ID</label> <input type="text"
 						value="<%out.print(request.getAttribute("idPaciente")); %>" name="iduser" id="iduser" class="input_id" readonly></input>

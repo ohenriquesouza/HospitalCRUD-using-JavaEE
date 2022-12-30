@@ -15,7 +15,7 @@
 </head>
 <body>
 	<center><h1>GERENCIAR AGENDAMENTOS</h1></center>
-	<center><a class="botao1" href="novaConsulta.html">Novo agendamento</a>
+	<center><a class="botao1" href="novaConsulta">Novo agendamento</a>
 	<%if(consultas.size() > 0){ %>
 	<a class="botao4" href="buscaAgendamento.html">Buscar agendamento</a></center>
 	<table id="tabela">

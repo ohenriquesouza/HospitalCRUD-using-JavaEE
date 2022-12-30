@@ -16,14 +16,19 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.DAO;
+import model.Espec;
 import model.JavaBeans;
+import model.Plano;
 
-@WebServlet(urlPatterns = { "/Controller", "/main", "/insert", "/select", "/edit", "/delete", "/relatorio", "/search" })
+@WebServlet(urlPatterns = { "/Controller", "/main", "/insert", "/select", "/edit", "/delete", "/relatorio", "/search",
+		"/novaConsulta", "/error", "/2nderror" })
 @SuppressWarnings("unused")
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DAO dao = new DAO();
 	JavaBeans consulta = new JavaBeans();
+	Espec especialidade = new Espec();
+	Plano planos = new Plano();
 
 	public Controller() {
 		super();
@@ -49,6 +54,12 @@ public class Controller extends HttpServlet {
 			gerarpdf(request, response);
 		} else if (action.equals("/search")) {
 			pesquisaConsulta(request, response);
+		} else if (action.equals("/novaConsulta")) {
+			novaConsulta(request, response);
+		} else if (action.equals("/error")) {
+			pacienteNaoExiste(request, response);
+		} else if (action.equals("/2nderror")) {
+			duplicidade(request, response);
 		} else {
 			response.sendRedirect("index.html");
 		}
@@ -63,35 +74,88 @@ public class Controller extends HttpServlet {
 		rd.forward(request, response);
 	}
 
-	protected void novoAgendamento(HttpServletRequest request, HttpServletResponse response)
+	protected void novaConsulta(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// System.out.println(request.getParameter("nome"));
-		// System.out.println(request.getParameter("NmCarteira"));
-		// System.out.println(request.getParameter("plan"));
-		// System.out.println(request.getParameter("especs"));
+		ArrayList<Espec> especs = dao.especsCadastradas();
+		request.setAttribute("especsCadastradas", especs);
+		ArrayList<Plano> planos = dao.planosCadastradas();
+		request.setAttribute("planosCadastradas", planos);
+		RequestDispatcher rd = request.getRequestDispatcher("novoAgendamento.jsp");
+		rd.forward(request, response);
+	}
+
+	protected int novoAgendamento(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		int achou = 0;
+
+//		 System.out.println(request.getParameter("nome"));
+//		 System.out.println(request.getParameter("NmCarteira"));
+//		 System.out.println(request.getParameter("plan"));
+//		 System.out.println(request.getParameter("especs"));
 
 		consulta.setnomePaciente(request.getParameter("nome"));
 		consulta.setnmCarteira(request.getParameter("NmCarteira"));
 		consulta.setPlanSaude(request.getParameter("plan"));
 		consulta.setespeci(request.getParameter("especs"));
-		//ArrayList<JavaBeans> registrosCarteira = dao.retornarRegistrosNmCarteira(consulta);
-		//for(int i = 0; i < registrosCarteira.size(); i++) {
-			//if(request.getParameter("plan") == registrosCarteira.get(i).getPlanSaude() || request.getParameter("especs") == registrosCarteira.get(i).getespeci()){
-				//System.out.println("DEU PORBLEMA");
-				//System.exit(0);
-			//}else {
-				//dao.agendarConsulta(consulta);
-				//response.sendRedirect("main");
-			//}
-		//}
-		dao.agendarConsulta(consulta);
-		response.sendRedirect("main");
+		ArrayList<JavaBeans> registrosCarteira = dao.retornarRegistrosNmCarteira(consulta);
+		for (int i = 0; i < registrosCarteira.size(); i++) {
+			if (Integer.parseInt(request.getParameter("plan")) == Integer
+					.parseInt(registrosCarteira.get(i).getPlanSaude())
+					&& Integer.parseInt(request.getParameter("especs")) == Integer
+							.parseInt(registrosCarteira.get(i).getespeci())) {
+				achou = 1;
+			}
+		}
+		if (achou == 1) {
+			response.sendRedirect("2nderror");
+			return 0;
+
+		} else {
+			consulta.setnomePaciente(request.getParameter("nome"));
+			consulta.setnmCarteira(request.getParameter("NmCarteira"));
+			consulta.setPlanSaude(request.getParameter("plan"));
+			consulta.setespeci(request.getParameter("especs"));
+			dao.agendarConsulta(consulta);
+			response.sendRedirect("main");
+			return 1;
+		}
+	}
+
+	protected void pacienteNaoExiste(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		ArrayList<Espec> especs = dao.especsCadastradas();
+		request.setAttribute("especsCadastradas", especs);
+		ArrayList<Plano> planos = dao.planosCadastradas();
+		request.setAttribute("planosCadastradas", planos);
+		consulta.setnomePaciente(request.getParameter("nome"));
+		consulta.setnmCarteira(request.getParameter("NmCarteira"));
+		consulta.setPlanSaude(request.getParameter("plan"));
+		consulta.setespeci(request.getParameter("especs"));
+		RequestDispatcher rd = request.getRequestDispatcher("error.jsp");
+		rd.forward(request, response);
+	}
+	
+	protected void duplicidade(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		ArrayList<Espec> especs = dao.especsCadastradas();
+		request.setAttribute("especsCadastradas", especs);
+		ArrayList<Plano> planos = dao.planosCadastradas();
+		request.setAttribute("planosCadastradas", planos);
+		consulta.setnomePaciente(request.getParameter("nome"));
+		consulta.setnmCarteira(request.getParameter("NmCarteira"));
+		consulta.setPlanSaude(request.getParameter("plan"));
+		consulta.setespeci(request.getParameter("especs"));
+		RequestDispatcher rd = request.getRequestDispatcher("2nderror.jsp");
+		rd.forward(request, response);
 	}
 
 	protected void listarConsultas(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		ArrayList<Espec> especs = dao.especsCadastradas();
+		request.setAttribute("especsCadastradas", especs);
+		ArrayList<Plano> planos = dao.planosCadastradas();
+		request.setAttribute("planosCadastradas", planos);
 		String idPacienteAux = request.getParameter("idPaciente");
 		consulta.setidPaciente(idPacienteAux);
 		dao.selecionaConsulta(consulta);
@@ -99,7 +163,9 @@ public class Controller extends HttpServlet {
 		request.setAttribute("nome", consulta.getnomePaciente());
 		request.setAttribute("NmCarteira", consulta.getnmCarteira());
 		request.setAttribute("plan", consulta.getPlanSaude());
-		request.setAttribute("espcs", consulta.getespeci());
+		request.setAttribute("especs", consulta.getespeci());
+//		System.out.println(request.getAttribute("plan"));
+//		System.out.println(request.getAttribute("especs"));
 		RequestDispatcher rd = request.getRequestDispatcher("edit.jsp");
 		rd.forward(request, response);
 	}
@@ -167,22 +233,30 @@ public class Controller extends HttpServlet {
 			doc.close();
 		}
 	}
-	
+
 	protected void pesquisaConsulta(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//System.out.println("Entrou no Controller");
-		
+		// System.out.println("Entrou no Controller");
+
 		String nomeSearch = request.getParameter("nome");
 		String nmCaSearch = request.getParameter("NmCarteira");
 		consulta.setnomePaciente(nomeSearch);
 		consulta.setnmCarteira(nmCaSearch);
-		dao.pesquisaConsulta(consulta);
-		request.setAttribute("idPaciente", consulta.getidPaciente());
-		request.setAttribute("nome", consulta.getnomePaciente());
-		request.setAttribute("NmCarteira", consulta.getnmCarteira());
-		request.setAttribute("plan", consulta.getPlanSaude());
-		request.setAttribute("especs", consulta.getespeci());
-		RequestDispatcher rd = request.getRequestDispatcher("view.jsp");
-		rd.forward(request, response);
+		int auxNome = dao.retornaSeExisteNome(consulta);
+		if (auxNome == 0) {
+			consulta.setnomePaciente(nomeSearch);
+			consulta.setnmCarteira(nmCaSearch);
+			dao.pesquisaConsulta(consulta);
+			request.setAttribute("idPaciente", consulta.getidPaciente());
+			request.setAttribute("nome", consulta.getnomePaciente());
+			request.setAttribute("NmCarteira", consulta.getnmCarteira());
+			request.setAttribute("plan", consulta.getPlanSaude());
+			request.setAttribute("especs", consulta.getespeci());
+			RequestDispatcher rd = request.getRequestDispatcher("view.jsp");
+			rd.forward(request, response);
+		} else {
+			response.sendRedirect("error");
+		}
 	}
+
 }

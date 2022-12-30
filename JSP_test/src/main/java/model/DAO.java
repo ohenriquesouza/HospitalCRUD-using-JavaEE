@@ -24,6 +24,10 @@ public class DAO {
 		}
 	}
 	public void agendarConsulta(JavaBeans consulta) {
+		System.out.println(consulta.getnomePaciente());
+		System.out.println(consulta.getnmCarteira());
+		System.out.println(consulta.getPlanSaude());
+		System.out.println(consulta.getespeci());
 		String add = "insert into usuario(nome_paciente, nm_carteira, idplan, idespecs) values(?, ?, ?, ?)";
 		try {
 			Connection con = conectar();
@@ -32,7 +36,8 @@ public class DAO {
 			pst.setString(2, consulta.getnmCarteira());
 			pst.setString(3, consulta.getPlanSaude());
 			pst.setString(4, consulta.getespeci());
-			pst.executeUpdate();
+			//pst.executeUpdate();
+			pst.execute();
 			con.close();
 		} catch (Exception e) {
 			System.out.println(e);
@@ -55,6 +60,46 @@ public class DAO {
 			}
 			con.close();
 			return consultasA;
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	
+	public ArrayList<Espec> especsCadastradas(){
+		ArrayList<Espec> especsC = new ArrayList<>();
+		String visualizar = "select * from especialidades";
+		try {
+			Connection con = conectar();
+			PreparedStatement pst = con.prepareStatement(visualizar);
+			ResultSet rs = pst.executeQuery();//<--- JDBC RESULTSET
+			while(rs.next()) {
+				String idespecs = rs.getString(1);
+				String nome_espec = rs.getString(2);
+				especsC.add(new Espec(idespecs, nome_espec));
+			}
+			con.close();
+			return especsC;
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	
+	public ArrayList<Plano> planosCadastradas(){
+		ArrayList<Plano> planosC = new ArrayList<>();
+		String visualizar = "select * from plano_saude";
+		try {
+			Connection con = conectar();
+			PreparedStatement pst = con.prepareStatement(visualizar);
+			ResultSet rs = pst.executeQuery();//<--- JDBC RESULTSET
+			while(rs.next()) {
+				String idplan = rs.getString(1);
+				String nome_plan = rs.getString(2);
+				planosC.add(new Plano(idplan, nome_plan));
+			}
+			con.close();
+			return planosC;
 		} catch (Exception e) {
 			System.out.println(e);
 			return null;
@@ -139,6 +184,7 @@ public class DAO {
 	}
 
 	public ArrayList<JavaBeans> retornarRegistrosNmCarteira(JavaBeans consulta) {
+		System.out.println("ENTROU NO DAO.JAVA");
 		ArrayList<JavaBeans> registrosCarteira = new ArrayList<>();
 		String selecionar = "select * from usuario where nm_carteira = ?";
 		try {
@@ -164,6 +210,33 @@ public class DAO {
 		} catch (Exception e) {
 			System.out.println(e);
 			return null;
+		}
+	}
+	
+	public int retornaSeExisteNome(JavaBeans consulta) {
+		String verificaTable = "select * from usuario where nome_paciente=? and nm_carteira=?";
+		try {
+			Connection con = conectar();
+			PreparedStatement pst = con.prepareStatement(verificaTable);
+			pst.setString(1, consulta.getnomePaciente());
+			pst.setString(2, consulta.getnmCarteira());
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				consulta.setnomePaciente(rs.getString(1));
+				consulta.setnmCarteira(rs.getString(2));
+				String nomePaciente= consulta.getnomePaciente();
+				String cmCarteira = consulta.getnmCarteira();
+				if(verificaTable == nomePaciente && verificaTable == cmCarteira) {
+					return 1;
+				}else {
+					return 0;
+				}
+			}
+			con.close();
+			return 1;
+		} catch (Exception e) {
+			System.out.println(e);
+			return 0;
 		}
 	}
 }

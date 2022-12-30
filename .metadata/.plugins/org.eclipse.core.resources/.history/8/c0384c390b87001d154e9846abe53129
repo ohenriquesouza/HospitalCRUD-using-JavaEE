@@ -1,0 +1,21 @@
+package model;
+
+public class Espec {
+	private String nome_espec;
+
+	public Espec() {
+		super();
+	}
+	
+	public Espec(String nome_espec) {
+		super();
+		this.nome_espec = nome_espec;
+	}
+
+	public String getnome_espec() {
+		return nome_espec;
+	}
+	public void setnome_espec(String nome_espec) {
+		this.nome_espec = nome_espec;
+	}
+}
